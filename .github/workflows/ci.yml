@@ -1,0 +1,51 @@
+# Continuous integration — runs on every push and pull request.
+# Keeps main green: compiles all modules, seeds a throwaway DB, and boots the app.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ci-test-key
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Byte-compile all modules
+        run: >
+          python -m py_compile
+          app.py wsgi.py config.py extensions.py models.py forms.py
+          content.py icons.py emails.py seed.py routes/public.py routes/admin.py
+
+      - name: Seed database and boot the app
+        run: |
+          python seed.py
+          python -c "from wsgi import app; n=len(list(app.url_map.iter_rules())); assert n > 10, n; print(f'OK — {n} routes registered')"
+
+      - name: Smoke-test key routes
+        run: |
+          python - <<'PY'
+          from wsgi import app
+          client = app.test_client()
+          for path in ["/", "/services", "/services/surgery", "/about", "/team",
+                       "/first-visit", "/reviews", "/contact", "/robots.txt", "/sitemap.xml"]:
+              r = client.get(path)
+              assert r.status_code == 200, f"{path} -> {r.status_code}"
+              print(f"200 {path}")
+          assert client.get("/no-such-page").status_code == 404
+          print("All route checks passed.")
+          PY

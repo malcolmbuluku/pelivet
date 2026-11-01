@@ -1,0 +1,26 @@
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="{{ url_for('public.home') }}" class="brand" aria-label="{{ clinic.name }} — home">
+      <img src="{{ url_for('static', filename='img/emblem.png') }}" alt="PELIVET emblem">
+      <span class="wm"><b>PELIVET</b><span>Veterinary Clinic</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      {% for endpoint, label in nav_items %}
+        <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint %}class="active"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="nav-cta">
+      <a class="nav-phone" href="tel:{{ clinic.phone_tel }}">{{ icon('phone') }}{{ clinic.phone }}</a>
+      <a class="btn btn-primary" href="{{ url_for('public.contact') }}#book">Book a visit</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    {% for endpoint, label in nav_items %}
+      <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint %}class="active"{% endif %}>{{ label }}</a>
+    {% endfor %}
+    <a class="btn btn-primary" href="{{ url_for('public.contact') }}#book">Book a visit</a>
+  </div>
+</header>

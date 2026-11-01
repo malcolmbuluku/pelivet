@@ -1,0 +1,59 @@
+{# Two-tone ring eyebrow — the brand's broken-ring motif #}
+{% macro eyebrow(label, center=false, dark=false) %}
+  <span class="eyebrow{% if dark %} on-dark{% endif %}"{% if center %} style="justify-content:center"{% endif %}>
+    <svg class="ring" viewBox="0 0 24 24" fill="none">
+      <path d="M12 3a9 9 0 0 1 9 9" stroke="{{ '#27B6C4' if dark else '#12304F' }}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M12 21a9 9 0 0 1-9-9" stroke="{{ '#ffffff' if dark else '#159AA8' }}" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    {{ label }}
+  </span>
+{% endmacro %}
+
+{# Service card #}
+{% macro service_card(service, icon, linked=true) %}
+  {% if linked %}<a class="svc-link" href="{{ url_for('public.service_detail', slug=service.slug) }}">{% endif %}
+  <div class="svc reveal">
+    <div class="ic">{{ icon(service.icon) }}</div>
+    <h3>{{ service.title }}</h3>
+    <p>{{ service.summary }}</p>
+    {% if linked %}<span class="more">Learn more {{ icon('arrow') }}</span>{% endif %}
+  </div>
+  {% if linked %}</a>{% endif %}
+{% endmacro %}
+
+{# Team member card #}
+{% macro team_card(m) %}
+  <div class="member reveal">
+    <div class="frame">
+      <svg class="ringsvg" viewBox="0 0 132 132" fill="none">
+        <path d="M66 6a60 60 0 0 1 60 60" stroke="#12304F" stroke-width="3" stroke-linecap="round"/>
+        <path d="M66 126a60 60 0 0 1-60-60" stroke="#159AA8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="avatar" style="background:linear-gradient(150deg,{{ m.color }},#0A1E33)">{{ m.initials }}</div>
+    </div>
+    <h3>{{ m.name }}</h3>
+    <div class="r">{{ m.role }}</div>
+    <p>{{ m.bio }}</p>
+  </div>
+{% endmacro %}
+
+{# Testimonial card #}
+{% macro quote_card(t, feature=false) %}
+  <div class="quote{% if feature %} feature{% endif %} reveal">
+    <div class="stars">{{ '★' * t.rating }}</div>
+    <p>"{{ t.quote }}"</p>
+    <div class="who">
+      <div class="pic" style="background:{{ t.color }}">{{ t.initials }}</div>
+      <div><b>{{ t.author }}</b><span>{{ t.pet }}</span></div>
+    </div>
+  </div>
+{% endmacro %}
+
+{# WTForms field with label + errors #}
+{% macro render_field(f, placeholder='', wide=false) %}
+  <div class="field">
+    {{ f.label }}
+    {{ f(placeholder=placeholder, class='invalid' if f.errors else '') }}
+    {% for e in f.errors %}<span class="err">{{ e }}</span>{% endfor %}
+  </div>
+{% endmacro %}

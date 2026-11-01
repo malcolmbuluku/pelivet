@@ -1,0 +1,50 @@
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-cta reveal">
+      <div>
+        <h3>Your pet deserves a team that treats them like family</h3>
+        <p>Book an appointment today — same-day slots are often available, and new families are always welcome.</p>
+      </div>
+      <a class="btn" href="{{ url_for('public.contact') }}#book">Book a visit {{ icon('arrow') }}</a>
+    </div>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="{{ url_for('static', filename='img/emblem.png') }}" alt="{{ clinic.name }}">
+        <div class="fname">PELIVET</div>
+        <div class="tag">Compassionate care. Healthy pets. Happy families.</div>
+        <p>Modern, heartfelt veterinary care for the companions who make life better.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="{{ url_for('public.services') }}">Services</a>
+        <a href="{{ url_for('public.about') }}">About us</a>
+        <a href="{{ url_for('public.team') }}">Our team</a>
+        <a href="{{ url_for('public.first_visit') }}">First visit</a>
+        <a href="{{ url_for('public.reviews') }}">Reviews</a>
+      </div>
+      <div class="foot-col">
+        <h4>Care</h4>
+        <a href="{{ url_for('public.service_detail', slug='wellness-exams') }}">Wellness exams</a>
+        <a href="{{ url_for('public.service_detail', slug='vaccinations') }}">Vaccinations</a>
+        <a href="{{ url_for('public.service_detail', slug='surgery') }}">Surgery</a>
+        <a href="{{ url_for('public.service_detail', slug='emergency-urgent') }}">Emergency</a>
+        <a href="{{ url_for('public.service_detail', slug='grooming-spa') }}">Grooming</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="tel:{{ clinic.phone_tel }}">{{ clinic.phone }}</a>
+        <a href="mailto:{{ clinic.email }}">{{ clinic.email }}</a>
+        <a href="{{ url_for('public.contact') }}#book">Book a visit</a>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.6-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.1.2-.3.3-.1.6.1.3.7 1.1 1.4 1.7.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.6-.1 1.1z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year">{{ year }}</span> {{ clinic.name }}. All rights reserved.</span>
+      <span>Made with <span style="color:var(--coral)">&hearts;</span> for pets and the people who love them.</span>
+    </div>
+  </div>
+</footer>

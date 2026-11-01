@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% from 'partials/_macros.html' import service_card %}
+{% block title %}{{ service.title }} — {{ clinic.name }}{% endblock %}
+{% block meta_desc %}{{ service.summary }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ url_for('public.home') }}">Home</a><span class="sep">/</span>
+      <a href="{{ url_for('public.services') }}">Services</a><span class="sep">/</span>
+      <span>{{ service.title }}</span>
+    </nav>
+    <h1>{{ service.title }}</h1>
+    <p class="lead">{{ service.summary }}</p>
+  </div>
+</section>
+
+<section class="pad" style="background:var(--paper)">
+  <div class="wrap detail-grid">
+    <div class="detail-body reveal">
+      <div class="lead-icon">{{ icon(service.icon) }}</div>
+      <h2>What this looks like at PELIVET</h2>
+      <p>{{ service.description }}</p>
+      <p>Our team will always talk you through the options, the costs, and the reasons behind every recommendation — no pressure, no jargon. If you're unsure whether this is what your pet needs, just ask; we're happy to point you the right way.</p>
+    </div>
+    <aside class="detail-card reveal">
+      <h3>What's included</h3>
+      <ul>
+        {% for item in service.include_list %}
+          <li>{{ icon('check') }}<span>{{ item }}</span></li>
+        {% endfor %}
+      </ul>
+      <a class="btn btn-primary" href="{{ url_for('public.contact', reason=service.title) }}#book">Book this service {{ icon('arrow') }}</a>
+    </aside>
+  </div>
+
+  {% if others %}
+  <div class="wrap others">
+    <h2>Other services you might need</h2>
+    <div class="others-grid">
+      {% for s in others %}{{ service_card(s, icon) }}{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

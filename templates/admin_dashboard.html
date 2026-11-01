@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — {{ clinic.name }}</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="admin-body">
+  {% include 'partials/_flash.html' %}
+  <div class="admin-top">
+    <div class="wrap">
+      <a href="{{ url_for('public.home') }}" class="brand">
+        <img src="{{ url_for('static', filename='img/emblem.png') }}" alt="" style="width:36px;height:36px">
+        <span class="wm"><b>PELIVET Admin</b></span>
+      </a>
+      <div class="right">
+        <a href="{{ url_for('public.home') }}" target="_blank">View site</a>
+        <a href="{{ url_for('admin.logout') }}">{{ icon('logout') }} Sign out</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-wrap">
+    <h1>Dashboard</h1>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi accent"><b>{{ stats.bookings_new }}</b><span>New bookings</span></div>
+      <div class="kpi"><b>{{ stats.bookings_total }}</b><span>Total bookings</span></div>
+      <div class="kpi"><b>{{ stats.messages_unread }}</b><span>Unread messages</span></div>
+      <div class="kpi"><b>{{ stats.messages_total }}</b><span>Total messages</span></div>
+      <div class="kpi"><b>{{ stats.subscribers }}</b><span>Subscribers</span></div>
+      <div class="kpi"><b>{{ stats.views_7d }}</b><span>Views (7 days)</span></div>
+    </div>
+
+    <div class="admin-panels">
+      <!-- BOOKINGS -->
+      <div class="panel" id="bookings">
+        <div class="panel-head">
+          <h2>{{ icon('calendar') }} Appointment requests</h2>
+          <div class="filter-tabs">
+            {% for s in ['all','new','confirmed','done'] %}
+              <a href="{{ url_for('admin.dashboard', status=s) }}#bookings" class="{{ 'on' if status == s }}">{{ s|capitalize }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Who</th><th>Pet &amp; reason</th><th>When</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for b in bookings %}
+              <tr>
+                <td class="who">
+                  <b>{{ b.name }}</b>
+                  <span>{{ b.phone }}{% if b.email %} · {{ b.email }}{% endif %}</span>
+                  {% if b.message %}<div class="meta" style="margin-top:6px">“{{ b.message }}”</div>{% endif %}
+                </td>
+                <td>
+                  <div>{{ b.pet_name or '—' }} <span class="meta">({{ b.pet_type }})</span></div>
+                  <div class="meta">{{ b.reason }}</div>
+                </td>
+                <td class="meta">
+                  {% if b.preferred_date %}Prefers {{ b.preferred_date.strftime('%d %b %Y') }}<br>{% endif %}
+                  Sent {{ b.created_at.strftime('%d %b, %H:%M') }}
+                </td>
+                <td>
+                  <span class="badge {{ b.status }}">{{ b.status }}</span>
+                  <div class="status-form">
+                    {% for s in ['new','confirmed','done'] %}
+                      {% if s != b.status %}
+                      <form method="POST" action="{{ url_for('admin.set_booking_status', booking_id=b.id, status=status) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="status" value="{{ s }}">
+                        <button type="submit">{{ s }}</button>
+                      </form>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </td>
+              </tr>
+            {% else %}
+              <tr><td colspan="4" class="empty-row">No bookings yet. They'll appear here as they come in.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SIDE: messages + top pages -->
+      <div>
+        <div class="panel" id="messages" style="margin-bottom:24px">
+          <div class="panel-head"><h2>{{ icon('inbox') }} Messages</h2></div>
+          <table class="tbl">
+            <tbody>
+              {% for m in messages %}
+                <tr>
+                  <td class="who">
+                    <b>{{ m.name }} {% if not m.is_read %}<span class="badge new" style="margin-left:4px">new</span>{% endif %}</b>
+                    <span>{{ m.email }}</span>
+                    {% if m.subject %}<div class="meta" style="margin-top:4px"><strong>{{ m.subject }}</strong></div>{% endif %}
+                    <div class="meta" style="margin-top:4px">{{ m.message }}</div>
+                    <div class="meta" style="margin-top:6px">{{ m.created_at.strftime('%d %b, %H:%M') }}
+                      {% if not m.is_read %}
+                        · <form method="POST" action="{{ url_for('admin.mark_message_read', message_id=m.id) }}" style="display:inline">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                          <button type="submit" style="background:none;border:none;color:var(--teal-deep);cursor:pointer;font-size:.82rem;padding:0">mark read</button>
+                        </form>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% else %}
+                <tr><td class="empty-row">No messages yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>{{ icon('pulse') }} Top pages (7 days)</h2></div>
+          <ul class="toppages">
+            {% for path, n in top_pages %}
+              <li><span class="path">{{ path }}</span><span class="n">{{ n }}</span></li>
+            {% else %}
+              <li class="empty-row" style="justify-content:center">No traffic recorded yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% from 'partials/_macros.html' import eyebrow, team_card %}
+{% block title %}About — {{ clinic.name }}{% endblock %}
+{% block meta_desc %}PELIVET was founded on a simple belief: pets are family. Learn about our approach to compassionate, modern veterinary care in Nairobi.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ url_for('public.home') }}">Home</a><span class="sep">/</span><span>About</span>
+    </nav>
+    {{ eyebrow('Who we are') }}
+    <h1>Real medicine, with a <em>whole lot of heart</em></h1>
+    <p class="lead">Pets are family, and family deserves attentive, honest, up-to-date care. That belief is where PELIVET started — and it's still how we practise every day.</p>
+  </div>
+</section>
+
+<!-- STORY / PROMISE -->
+<section class="promise pad">
+  <svg class="paw paw-a" viewBox="0 0 512 512" fill="currentColor"><ellipse cx="256" cy="340" rx="120" ry="95"/><ellipse cx="120" cy="200" rx="52" ry="66"/><ellipse cx="256" cy="150" rx="55" ry="70"/><ellipse cx="392" cy="200" rx="52" ry="66"/></svg>
+  <div class="wrap promise-grid">
+    <div class="promise-copy reveal">
+      {{ eyebrow('Our story') }}
+      <h2>Founded on a simple belief</h2>
+      <p class="pull">Our logo says it best — a dog and a cat, cradled in a caring hand. <span class="hl">That's not just a picture. It's how we practice.</span></p>
+      <p>We pair modern equipment and evidence-based medicine with the patience to actually listen — to you and to your pet. Whether it's a routine checkup, a worrying symptom, or a tough decision, you'll never feel like just another appointment. You'll feel like part of the pack.</p>
+      <div class="promise-sign">
+        <img src="{{ url_for('static', filename='img/emblem.png') }}" alt="">
+        <div>
+          <div class="sig">The PELIVET Team</div>
+          <div class="role">Veterinarians, nurses &amp; the front-desk faces you'll know by name</div>
+        </div>
+      </div>
+    </div>
+    <div class="promise-card reveal">
+      <img class="emblem" src="{{ url_for('static', filename='img/emblem.png') }}" alt="">
+      <h3>The PELIVET promise</h3>
+      <p>Every pet through our doors is treated as if they were our own — no rushing, no jargon, just clear, caring guidance.</p>
+      <ul class="pledge">
+        {% for line in ['Fear-free, low-stress handling for anxious pets','Transparent pricing with no surprise bills','Plain-language explanations you can trust','Follow-ups so you\'re never left wondering'] %}
+          <li><svg class="hx" viewBox="0 0 24 24" fill="#159AA8"><path d="M12 21C7 17 3 13 3 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 9 2.5C21 13 17 17 12 21z"/></svg>{{ line }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values pad">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      {{ eyebrow('What we stand for', center=true) }}
+      <h2>The values behind every visit</h2>
+      <p>The principles that guide how we treat your pet — and you.</p>
+    </div>
+    <div class="values-grid">
+      <div class="value reveal">
+        <div class="ic">{{ icon('heart') }}</div>
+        <h3>Compassion first</h3>
+        <p>We treat every animal with the gentleness and dignity we'd want for our own, and we meet worried owners with patience, not pressure.</p>
+      </div>
+      <div class="value reveal">
+        <div class="ic">{{ icon('shield') }}</div>
+        <h3>Honest &amp; transparent</h3>
+        <p>Clear explanations, upfront costs, and recommendations we'd make for our own pets. No upselling, no surprise bills.</p>
+      </div>
+      <div class="value reveal">
+        <div class="ic">{{ icon('pulse') }}</div>
+        <h3>Modern medicine</h3>
+        <p>On-site diagnostics, evidence-based treatment and continuous learning, so your pet gets care that's genuinely up to date.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team pad">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      {{ eyebrow('The people behind the paws', center=true) }}
+      <h2>Meet your care team</h2>
+      <p>Skilled, certified and genuinely fond of animals — the folks who'll know your pet by name.</p>
+    </div>
+    <div class="team-page-grid">
+      {% for m in team %}{{ team_card(m) }}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

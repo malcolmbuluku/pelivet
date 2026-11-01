@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% from 'partials/_macros.html' import eyebrow, service_card %}
+{% block title %}Services — {{ clinic.name }}{% endblock %}
+{% block meta_desc %}Full-service veterinary care at {{ clinic.name }}: wellness exams, vaccinations, dental, surgery, diagnostics, emergency care, parasite prevention, nutrition and grooming.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ url_for('public.home') }}">Home</a><span class="sep">/</span><span>Services</span>
+    </nav>
+    {{ eyebrow('What we do') }}
+    <h1>Complete care, <em>from nose to tail</em></h1>
+    <p class="lead">Preventive, medical, surgical and everyday services — all under one roof, delivered by a team that treats every patient like their own. Tap any service to learn more.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('public.contact') }}#book">Book an appointment {{ icon('arrow') }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="services pad">
+  <div class="wrap">
+    <div class="svc-page-grid">
+      {% for s in services %}{{ service_card(s, icon) }}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% from 'partials/_macros.html' import eyebrow, render_field %}
+{% block title %}Contact & Book — {{ clinic.name }}{% endblock %}
+{% block meta_desc %}Book a visit or get in touch with {{ clinic.name }} in Nairobi. Same-day slots often available, plus our 24/7 emergency line.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ url_for('public.home') }}">Home</a><span class="sep">/</span><span>Contact</span>
+    </nav>
+    {{ eyebrow('Get in touch') }}
+    <h1>Book a visit or <em>say hello</em></h1>
+    <p class="lead">Same-day slots are often available. Request an appointment below and we'll confirm within one business hour — or reach us directly any time.</p>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="book pad" id="book" style="scroll-margin-top:90px">
+  <div class="wrap book-grid">
+    <div class="book-info reveal">
+      <div>
+        {{ eyebrow('Reach us directly') }}
+        <h2 style="margin-top:14px">We're here for you and your pet</h2>
+        <p class="lead">Call, email or drop by — whatever's easiest. For anything urgent, use our 24/7 line.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">{{ icon('pin') }}</div>
+        <div><b>Visit us</b><p>{{ clinic.address }}<br>Free parking on site</p></div>
+      </div>
+      <div class="info-card">
+        <div class="ic">{{ icon('phone') }}</div>
+        <div><b>Call or WhatsApp</b><p><a href="tel:{{ clinic.phone_tel }}">{{ clinic.phone }}</a> &middot; <a href="mailto:{{ clinic.email }}">{{ clinic.email }}</a></p></div>
+      </div>
+      <div class="info-card">
+        <div class="ic">{{ icon('clock') }}</div>
+        <div style="flex:1"><b>Opening hours</b>
+          <div class="hours-row"><span>Mon – Fri</span><b>8:00 – 19:00</b></div>
+          <div class="hours-row"><span>Saturday</span><b>9:00 – 17:00</b></div>
+          <div class="hours-row"><span>Sunday</span><b>10:00 – 14:00</b></div>
+        </div>
+      </div>
+      <div class="info-card emergency">
+        <div class="ic">{{ icon('alert') }}</div>
+        <div><b>Pet emergency?</b><p>Call our 24/7 line now: <a href="tel:{{ clinic.emergency_tel }}">{{ clinic.emergency }}</a></p></div>
+      </div>
+      <div class="map-embed">
+        <iframe title="Map to {{ clinic.name }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://maps.google.com/maps?q={{ clinic.maps_query | urlencode }}&z=13&output=embed"></iframe>
+      </div>
+    </div>
+
+    <div class="form-card reveal">
+      {% if not booked %}
+      <form method="POST" action="{{ url_for('public.contact') }}#book" novalidate>
+        {{ booking_form.hidden_tag() }}
+        <input type="hidden" name="form_type" value="booking">
+        <h3>Request an appointment</h3>
+        <p class="sub">We'll get back to you within one business hour to confirm.</p>
+        <div class="row2">{{ render_field(booking_form.name, 'Jane Doe') }}{{ render_field(booking_form.phone, '+254 700 000 000') }}</div>
+        <div class="row2">{{ render_field(booking_form.pet_name, 'Biscuit') }}{{ render_field(booking_form.pet_type) }}</div>
+        <div class="row2">{{ render_field(booking_form.reason) }}{{ render_field(booking_form.preferred_date) }}</div>
+        {{ render_field(booking_form.email, 'you@example.com') }}
+        {{ render_field(booking_form.message, "Tell us what's going on with your pet…") }}
+        <button type="submit" class="btn submit">Request appointment {{ icon('arrow') }}</button>
+        <p class="form-note">By submitting, you agree to be contacted about your appointment. We never share your details.</p>
+      </form>
+      {% else %}
+      <div class="form-success" style="display:block">
+        <div class="check">{{ icon('check') }}</div>
+        <h3>Request received!</h3>
+        <p>Thanks — we'll call or message you shortly to lock in your visit. Give your pet a scratch from us. 🐾</p>
+        <a class="btn btn-primary" style="margin-top:22px" href="{{ url_for('public.home') }}">Back to home</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- GENERAL MESSAGE -->
+<section class="pad" id="message" style="background:var(--mint);scroll-margin-top:90px">
+  <div class="wrap" style="max-width:720px">
+    <div class="sec-head center reveal" style="margin-bottom:34px">
+      {{ eyebrow('Not urgent?', center=true) }}
+      <h2>Send us a message</h2>
+      <p>Questions about your pet, our services, or anything else — drop us a line and we'll reply soon.</p>
+    </div>
+    <div class="form-card light reveal">
+      <form method="POST" action="{{ url_for('public.contact') }}#message" novalidate>
+        {{ contact_form.hidden_tag() }}
+        <input type="hidden" name="form_type" value="contact">
+        <div class="row2">{{ render_field(contact_form.name, 'Jane Doe') }}{{ render_field(contact_form.email, 'you@example.com') }}</div>
+        {{ render_field(contact_form.subject, 'How can we help?') }}
+        {{ render_field(contact_form.message, 'Your message…') }}
+        <button type="submit" class="btn submit">Send message {{ icon('arrow') }}</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

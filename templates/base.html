@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ clinic.name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}{{ clinic.name }} — compassionate, full-service veterinary care in Nairobi. Wellness exams, vaccinations, dentistry, surgery, diagnostics and 24/7 emergency care.{% endblock %}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  {% include 'partials/_nav.html' %}
+  {% include 'partials/_flash.html' %}
+
+  <main id="top">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'partials/_footer.html' %}
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

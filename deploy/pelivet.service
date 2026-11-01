@@ -1,0 +1,20 @@
+#  systemd unit — copy to /etc/systemd/system/pelivet.service
+#  Then:  sudo systemctl daemon-reload && sudo systemctl enable --now pelivet
+#  Mirrors how pabesh.online runs on the droplet.
+
+[Unit]
+Description=PELIVET Veterinary Clinic (Gunicorn)
+After=network.target
+
+[Service]
+User=thebuluku
+Group=www-data
+WorkingDirectory=/home/thebuluku/pelivet
+Environment="PATH=/home/thebuluku/pelivet/.venv/bin"
+EnvironmentFile=/home/thebuluku/pelivet/.env
+ExecStart=/home/thebuluku/pelivet/.venv/bin/gunicorn --config gunicorn_config.py wsgi:app
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

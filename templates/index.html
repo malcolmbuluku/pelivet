@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% from 'partials/_macros.html' import eyebrow, service_card, quote_card %}
+{% block title %}{{ clinic.name }} — Compassionate care. Healthy pets. Happy families.{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><div class="glow g1"></div><div class="glow g2"></div></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      {{ eyebrow('Full-service care for cats & dogs') }}
+      <h1 class="reveal">Compassionate care.<br><em>Healthy pets.</em><br>Happy families.</h1>
+      <p class="lead reveal">From wagging tails to gentle purrs, PELIVET gives your companion attentive, modern veterinary care — with the warmth you'd give family.</p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-primary" href="{{ url_for('public.contact') }}#book">Book an appointment {{ icon('arrow') }}</a>
+        <a class="btn btn-ghost" href="{{ url_for('public.services') }}">Explore services</a>
+      </div>
+      <div class="hero-trust reveal">
+        <div class="rate">
+          <div class="faces" aria-hidden="true">
+            <span style="background:#12304F">S</span><span style="background:#159AA8">T</span><span style="background:#1E4E7A">L</span><span style="background:#0E7A86">A</span>
+          </div>
+          <div class="rtxt"><b><span class="stars">★★★★★</span> 4.9</b><span>from 600+ happy pet parents</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="cradle-stage">
+        <div class="ghost-ring r1"></div>
+        <div class="ghost-ring r2"></div>
+        <div class="logo-card">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" alt="{{ clinic.name }} — a dog and a cat cradled in a caring hand">
+        </div>
+        <div class="mini-card m1">{{ icon('heart') }} Cats &amp; dogs welcome</div>
+        <div class="mini-card m2">{{ icon('pulse') }} Same-day slots</div>
+        <div class="status-pill"><span class="dot"></span>Open now · closes 7:00 pm</div>
+      </div>
+    </div>
+  </div>
+  <div class="cup-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,120 L0,54 C240,118 480,120 720,120 C960,120 1200,118 1440,54 L1440,120 Z" fill="#12304F"/></svg>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<div class="statband">
+  <div class="wrap">
+    <div class="stat reveal"><b>12<span class="u">+</span></b><span>Years of caring</span></div>
+    <div class="stat reveal"><b>15<span class="u">k</span></b><span>Pets treated</span></div>
+    <div class="stat reveal"><b>4.9<span class="u">★</span></b><span>Average rating</span></div>
+    <div class="stat reveal"><b>24<span class="u">/7</span></b><span>Emergency line</span></div>
+  </div>
+</div>
+
+<!-- SERVICES PREVIEW -->
+<section class="services pad">
+  <div class="wrap svc-layout">
+    <div class="svc-rail reveal">
+      {{ eyebrow('What we do') }}
+      <h2>Everything your pet needs, under one roof</h2>
+      <p>Preventive, medical, surgical and everyday care — delivered by a team that treats every patient like their own.</p>
+      <a class="btn btn-navy" href="{{ url_for('public.services') }}">All services {{ icon('arrow') }}</a>
+    </div>
+    <div class="svc-grid">
+      {% for s in services %}{{ service_card(s, icon) }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise pad">
+  <svg class="paw paw-a" viewBox="0 0 512 512" fill="currentColor"><ellipse cx="256" cy="340" rx="120" ry="95"/><ellipse cx="120" cy="200" rx="52" ry="66"/><ellipse cx="256" cy="150" rx="55" ry="70"/><ellipse cx="392" cy="200" rx="52" ry="66"/></svg>
+  <div class="wrap promise-grid">
+    <div class="promise-copy reveal">
+      {{ eyebrow('Why families choose us') }}
+      <h2>Real medicine, with a whole lot of heart</h2>
+      <p class="pull">Our logo says it best — a dog and a cat, cradled in a caring hand. <span class="hl">That's not just a picture. It's how we practice.</span></p>
+      <p>PELIVET was founded on a simple belief: pets are family, and family deserves attentive, honest, up-to-date care. We pair modern equipment and evidence-based medicine with the patience to actually listen — to you and to your pet.</p>
+      <a class="btn btn-ghost" href="{{ url_for('public.about') }}">More about us {{ icon('arrow') }}</a>
+    </div>
+    <div class="promise-card reveal">
+      <img class="emblem" src="{{ url_for('static', filename='img/emblem.png') }}" alt="">
+      <h3>The PELIVET promise</h3>
+      <p>Every pet through our doors is treated as if they were our own — no rushing, no jargon, just clear, caring guidance.</p>
+      <ul class="pledge">
+        {% for line in ['Fear-free, low-stress handling for anxious pets','Transparent pricing with no surprise bills','Plain-language explanations you can trust','Follow-ups so you\'re never left wondering'] %}
+          <li><svg class="hx" viewBox="0 0 24 24" fill="#159AA8"><path d="M12 21C7 17 3 13 3 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 9 2.5C21 13 17 17 12 21z"/></svg>{{ line }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS PREVIEW -->
+<section class="testi pad">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      {{ eyebrow('Happy families', center=true) }}
+      <h2>Loved by pets and their people</h2>
+      <p>A few words from the families who trust us with their best friends.</p>
+    </div>
+    <div class="testi-grid">
+      {% for t in testimonials %}{{ quote_card(t, feature=loop.first) }}{% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:40px" class="reveal">
+      <a class="btn btn-ghost" href="{{ url_for('public.reviews') }}">Read more reviews {{ icon('arrow') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

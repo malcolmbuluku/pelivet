@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Page not found — {{ clinic.name }}{% endblock %}
+{% block content %}
+<section class="page-hero" style="text-align:center">
+  <div class="wrap" style="max-width:620px;margin:0 auto">
+    <div style="font-family:var(--serif);font-style:italic;font-size:5rem;color:var(--teal-deep);line-height:1">404</div>
+    <h1 style="margin-top:10px">This page wandered off</h1>
+    <p class="lead" style="margin:0 auto 30px">Even the best-trained pups get lost sometimes. Let's get you back on track.</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a class="btn btn-primary" href="{{ url_for('public.home') }}">Back to home {{ icon('arrow') }}</a>
+      <a class="btn btn-ghost" href="{{ url_for('public.contact') }}">Contact us</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

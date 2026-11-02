@@ -74,7 +74,32 @@ pelivet/
 
 ---
 
+## Where things run
+
+Two environments, two different sets of commands — don't mix them:
+
+| | **Local (your Windows machine)** | **Production (DigitalOcean droplet)** |
+|---|---|---|
+| Purpose | Develop & preview | Serve the live site |
+| Run with | `./run.sh` or `python app.py` | Gunicorn + systemd + Nginx |
+| Server | Flask dev server (`:5000`) | Gunicorn behind Nginx (`:443`) |
+| `sudo` / `systemctl` / `nginx` / `certbot`? | **No** — these don't exist on Windows | **Yes** — only here, over SSH |
+
+Rule of thumb: on Windows you only ever run `./run.sh` (or `python app.py`).
+Everything with `sudo` runs on the droplet.
+
+---
+
 ## Run locally
+
+Fastest — one command creates the venv, installs deps, seeds the DB and starts
+the server (works in Git Bash on Windows and on Linux/macOS):
+
+```bash
+./run.sh
+```
+
+Or do it by hand:
 
 ### Windows (your machine — use `py -3`)
 
@@ -140,6 +165,11 @@ or data leave your machine. After the first push, add the three Actions secrets
 ---
 
 ## Deploy to the DigitalOcean droplet
+
+> ⚠️ **Run this block on the droplet, over SSH (`ssh thebuluku@138.68.185.223`)
+> — not on your Windows machine.** systemd, nginx and certbot are Linux-only;
+> on Windows these commands fail with "sudo is disabled". On Windows you only
+> run the site locally (see **Run locally**).
 
 Same pattern as pabesh. On the droplet (`138.68.185.223`, user `thebuluku`):
 

@@ -1,9 +1,10 @@
 """PELIVET Veterinary Clinic — Flask application factory."""
 import logging
-from datetime import datetime, timedelta
+from datetime import timedelta
 from flask import Flask, render_template, request, g
 
 from config import Config
+from utils import utcnow
 from extensions import db, csrf, mail
 from icons import icon
 
@@ -52,7 +53,7 @@ def create_app(config_class: type = Config) -> Flask:
                 "address": app.config["CLINIC_ADDRESS"],
                 "maps_query": app.config["CLINIC_MAPS_QUERY"],
             },
-            "year": datetime.utcnow().year,
+            "year": utcnow().year,
             "icon": icon,
             "nav_items": [
                 ("public.services", "Services"),

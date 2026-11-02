@@ -5,8 +5,8 @@ and drive the public pages. Submission models (Booking, ContactMessage,
 Newsletter) capture what visitors send. PageView powers the lightweight
 analytics panel in the admin dashboard.
 """
-from datetime import datetime, date
 from extensions import db
+from utils import utcnow
 
 
 class Service(db.Model):
@@ -64,7 +64,7 @@ class Booking(db.Model):
     preferred_date = db.Column(db.Date, nullable=True)
     message = db.Column(db.Text, default="")
     status = db.Column(db.String(20), default="new")          # new | confirmed | done
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    created_at = db.Column(db.DateTime, default=utcnow, index=True)
 
     STATUSES = ("new", "confirmed", "done")
 
@@ -77,14 +77,14 @@ class ContactMessage(db.Model):
     subject = db.Column(db.String(160), default="")
     message = db.Column(db.Text, nullable=False)
     is_read = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    created_at = db.Column(db.DateTime, default=utcnow, index=True)
 
 
 class Newsletter(db.Model):
     __tablename__ = "newsletter"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(160), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=utcnow)
 
 
 class PageView(db.Model):
@@ -94,4 +94,4 @@ class PageView(db.Model):
     referrer = db.Column(db.String(300), default="")
     user_agent = db.Column(db.String(300), default="")
     ip = db.Column(db.String(60), default="")
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    created_at = db.Column(db.DateTime, default=utcnow, index=True)

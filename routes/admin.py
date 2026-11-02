@@ -1,5 +1,5 @@
 """Admin area — session login + a dashboard for bookings, messages and basic analytics."""
-from datetime import datetime, timedelta
+from datetime import timedelta
 from functools import wraps
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash, session, current_app, abort
@@ -8,6 +8,7 @@ from sqlalchemy import func
 from extensions import db
 from models import Booking, ContactMessage, Newsletter, PageView
 from forms import AdminLoginForm
+from utils import utcnow
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -56,7 +57,7 @@ def dashboard():
     messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).limit(100).all()
 
     # --- lightweight analytics ---
-    week_ago = datetime.utcnow() - timedelta(days=7)
+    week_ago = utcnow() - timedelta(days=7)
     stats = {
         "bookings_total": Booking.query.count(),
         "bookings_new": Booking.query.filter_by(status="new").count(),

@@ -13,6 +13,10 @@ def create_app(config_class: type = Config) -> Flask:
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config_class)
 
+    # Trust Nginx's X-Forwarded-* headers (correct https:// URLs and client IPs)
+    from werkzeug.middleware.proxy_fix import ProxyFix
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
     # instance/ holds the SQLite file and is created on first run
     import os
     os.makedirs(app.instance_path, exist_ok=True)
